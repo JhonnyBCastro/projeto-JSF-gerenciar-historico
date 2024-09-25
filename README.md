@@ -1,1 +1,1 @@
-# Este projeto tem como intuito implementar um serico para gerenciar atendimentos
+# Este projeto tem como intuito implementar um service para gerenciar atendimentos
