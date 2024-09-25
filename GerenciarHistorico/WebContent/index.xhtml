@@ -5,8 +5,15 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"> 
 
-<h:head></h:head> 
-<body> 
+<ui:composition template="template.xhtml">
 
-</body> 
+	<ui:define name="titulo">
+		<h1>Bem vindo</h1>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:outputText value="Selecione uma opcao acima" />
+	</ui:define>
+
+</ui:composition>
 </html>

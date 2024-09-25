@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,11 +22,8 @@ public abstract class Pessoa {
 	private String celular;
 	private Date nascimento;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
-
-	public Pessoa() {
-	}
 
 	public String getNomeCompleto() {
 		return primeiroNome + " " + sobrenome;

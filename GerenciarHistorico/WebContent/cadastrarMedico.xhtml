@@ -1,12 +1,112 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head> 
-<body> 
 
-</body> 
+<ui:composition template="template.xhtml">
+	<ui:define name="titulo">Gerenciamento de médicos</ui:define>
+	<ui:define name="conteudo">
+		<p:growl life="5000" id="msg" />
+
+		<h:form id="formMedico">
+			<h:panelGrid columns="2">
+
+				<p:column>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Primeiro nome" for="nome" />
+						<p:inputText value="#{medicoBean.medico.primeiroNome}" id="nome" />
+
+						<p:outputLabel value="Sobrenome" for="sobrenome" />
+						<p:inputText value="#{medicoBean.medico.sobrenome}" id="sobrenome" />
+
+						<p:outputLabel value="Telefone" for="telefone" />
+						<p:inputText value="#{medicoBean.medico.telefone}" id="telefone" />
+
+						<p:outputLabel value="Celular" for="celular" />
+						<p:inputText value="#{medicoBean.medico.celular}" id="celular" />
+
+						<p:outputLabel value="Data de nascimento" for="dataNasc" />
+						<p:datePicker value="#{medicoBean.medico.nascimento}"
+							id="dataNasc" pattern="dd/MM/yyyy" mask="true" locale="pt_BR" />
+
+						<p:outputLabel value="CRM" for="crm" />
+						<p:inputText value="#{medicoBean.medico.crm}" id="crm" />
+
+						<p:outputLabel value="Especialidade" for="especialidade" />
+						<p:inputText value="#{medicoBean.medico.especialidade}"
+							id="especialidade" />
+
+					</h:panelGrid>
+				</p:column>
+			</h:panelGrid>
+
+			<p:column>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Rua" for="rua" />
+					<p:inputText value="#{medicoBean.medico.endereco.rua}" id="rua" />
+
+					<p:outputLabel value="Bairro" for="bairro" />
+					<p:inputText value="#{medicoBean.medico.endereco.bairro}"
+						id="bairro" />
+
+					<p:outputLabel value="Numero" for="numero" />
+					<p:inputText value="#{medicoBean.medico.endereco.numero}"
+						id="numero" />
+
+					<p:outputLabel value="Cep" for="cep" />
+					<p:inputText value="#{medicoBean.medico.endereco.cep}" id="cep" />
+
+					<p:outputLabel value="Cidade" for="cidade" />
+					<p:inputText value="#{medicoBean.medico.endereco.cidade}"
+						id="cidade" />
+
+				</h:panelGrid>
+			</p:column>
+			<p:commandButton action="#{medicoBean.gravar()}" value="Salvar"
+				process="@form" update="@form, msg, formList" />
+
+		</h:form>
+
+		<div class="card">
+			<h:form id="formList">
+				<p:dataTable value="#{medicoBean.medicos}" var="medicoList"
+					widgetVar="customersTable"
+					emptyMessage="Nenhuma informacao cadastrada">
+
+					<p:column headerText="Nome" sortBy="#{medicoList.primeiroNome}"
+						filterBy="#{medicoList.primeiroNome}" filterMatchMode="contains"
+						filterPlaceholder="Filtrar pelo nome">
+						<h:outputText value="#{medicoList.nomeCompleto}" />
+					</p:column>
+
+					<p:column headerText="CRM">
+						<h:outputText value="#{medicoList.crm}" />
+					</p:column>
+
+					<p:column headerText="Especialidade">
+						<h:outputText value="#{medicoList.especialidade}" />
+					</p:column>
+
+					<p:column>
+						<p:commandButton action="#{medicoBean.editarMedico(medicoList)}"
+							value="Editar" process="@form" update="@form, formMedico" />
+					</p:column>
+					
+					<p:column>
+						<p:commandButton action="#{medicoBean.deletarMedico(medicoList)}"
+							value="Excluir" process="@form" update="@form" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</div>
+
+
+	</ui:define>
+
+</ui:composition>
+
 </html>

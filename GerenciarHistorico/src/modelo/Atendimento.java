@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +32,8 @@ public class Atendimento {
 	}
 
 	public void gerarNumeroAtendimento() {
-
+		Random numAtendimento = new Random();
+		numero = numAtendimento.nextInt(10000);
 	}
 
 	public Long getId() {
