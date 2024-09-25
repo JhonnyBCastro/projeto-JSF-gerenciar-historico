@@ -6,10 +6,7 @@ Este projeto é uma aplicação web desenvolvida com JavaServer Faces (JSF) e Pr
 
 ## Diagrama de Classe
 O Modelo e o Mapeamento das classes foram feitos de acordo com o Diagrama de Classes.  
-  
-```mermaid
-
-```
+![Image and Preview Themes on the toolbar](digrama-de-classe.PNG)
 
 ## Tecnologias Utilizadas
 Front-end:  
