@@ -9,17 +9,38 @@ O Modelo e o Mapeamento das classes foram feitos de acordo com o Diagrama de Cla
 ![Image and Preview Themes on the toolbar](digrama-de-classe.PNG)
 
 ## Tecnologias Utilizadas
-Front-end:  
-![JavaServer Faces](https://img.shields.io/badge/JavaServer_Faces-CC2927?style=for-the-badge&logo=JavaServer_Faces%20sql%20server&logoColor=white)
-  
-Back-end:  
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-  
-Banco de Dados:  
-![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
-  
-Frameworks e Bibliotecas:   
-![Eclipse](https://img.shields.io/badge/Eclipse-FE7A16.svg?style=for-the-badge&logo=Eclipse&logoColor=white) ![JBoss](https://img.shields.io/badge/JBoss-FE7A16.svg?style=for-the-badge&logo=JBoss&logoColor=white) ![JPA](https://img.shields.io/badge/JPA-FE7A16.svg?style=for-the-badge&logo=JPA&logoColor=white) ![WildFly](https://img.shields.io/badge/WildFly-FE7A16.svg?style=for-the-badge&logo=Wildfly&logoColor=white)
+<table>
+  <tr>
+    <td>
+      <img
+        align="left"
+        src="https://github-readme-stats.vercel.app/api/top-langs/?username=JhonnyBCastro&theme=dracula"
+        alt="default"
+      />
+    </td>
+    <td>
+      <p align="left">
+        <h3>Frontend:</h3>
+        <img src="https://img.shields.io/badge/JSF-%2343853D.svg?style=for-the-badge&logo=java&logoColor=white" alt="JSF Badge" />
+        <img src="https://img.shields.io/badge/PrimeFaces-%23007ACC.svg?style=for-the-badge&logo=java&logoColor=white" alt="PrimeFaces Badge" />
+        <img src="https://img.shields.io/badge/CSS-1572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS Badge" />
+        <img src="https://img.shields.io/badge/XHTML-%23E44D26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="XHTML Badge" />
+        <h3>Backend:</h3>
+        <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java Badge" />
+        <h3>Banco de Dados:</h3>
+        <img src="https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL Badge" />
+      </p>
+    </td>
+    <td>
+      <h3>IDE:</h3>
+      <img src="https://img.shields.io/badge/Eclipse-FE7A16.svg?style=for-the-badge&logo=Eclipse&logoColor=white" alt="Eclipse Badge" />
+      <h3>Frameworks e Bibliotecas:</h3>
+      <img src="https://img.shields.io/badge/JBoss-FE7A16.svg?style=for-the-badge&logo=JBoss&logoColor=white" alt="JBoss Badge" />
+      <img src="https://img.shields.io/badge/JPA-FE7A16.svg?style=for-the-badge&logo=JPA&logoColor=white" alt="JPA Badge" />
+      <img src="https://img.shields.io/badge/WildFly-FE7A16.svg?style=for-the-badge&logo=Wildfly&logoColor=white" alt="WildFly Badge" />
+    </td>
+  </tr>
+</table>
  
 ## Funcionalidades
 ### Cadastro de Médicos
