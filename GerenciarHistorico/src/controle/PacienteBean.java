@@ -43,10 +43,10 @@ public class PacienteBean {
 
 		if (paciente.getId() == null) {
 			pacienteService.create(paciente);
-			msg = "Paciente cadastrado";
+			msg = "Medico cadastrado";
 		} else {
 			pacienteService.merge(paciente);
-			msg = "Paciente editado";
+			msg = "Medico editado";
 		}
 
 		FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
