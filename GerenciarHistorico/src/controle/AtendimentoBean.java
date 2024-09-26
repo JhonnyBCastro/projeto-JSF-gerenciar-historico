@@ -26,98 +26,103 @@ import java.util.Random;
 @ManagedBean
 public class AtendimentoBean {
 
-    @EJB
-    private PacienteService pacienteService;
+	@EJB
+	private PacienteService pacienteService;
 
-    @EJB
-    private MedicoService medicoService;
+	@EJB
+	private MedicoService medicoService;
 
-    @EJB
-    private AtendimentoService atendimentoService;
+	@EJB
+	private AtendimentoService atendimentoService;
 
-    private List<Medico> medicos;
-    private List<Medico> medicosSelecionados;
-    private Paciente paciente = new Paciente();
-    private Atendimento atendimento;
-    private boolean pacienteEncontrado;
-    private Endereco endereco = new Endereco();
+	private List<Medico> medicos;
+	private List<Medico> medicosSelecionados;
+	private Paciente paciente = new Paciente();
+	private Atendimento atendimento;
+	private boolean pacienteEncontrado;
 
-    @PostConstruct
-    public void init() {
-        medicos = medicoService.listAll();
-        atendimento = new Atendimento();
-        paciente = new Paciente();
-        pacienteEncontrado = false;
-        medicosSelecionados = new ArrayList<Medico>();
-    }
+	@PostConstruct
+	public void init() {
+		medicos = medicoService.listAll();
+		atendimento = new Atendimento();
+		paciente = new Paciente();
+		pacienteEncontrado = false;
+		paciente.setEndereco(new Endereco());
+		medicosSelecionados = new ArrayList<Medico>();
+	}
 
-    public void buscarPaciente() {
-        if (paciente.getCpf() != null && !paciente.getCpf().trim().isEmpty()) {
-            try {
-                Paciente pacienteEncontrado = pacienteService.findByCpf(paciente.getCpf());
-                if (pacienteEncontrado != null) {
-                    this.paciente = pacienteEncontrado;
-                    this.pacienteEncontrado = true;
-                    FacesContext.getCurrentInstance().addMessage(null, 
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                        "Sucesso", "Paciente encontrado: " + paciente.getNomeCompleto()));
-                } else {
-                    this.paciente = new Paciente();
-                    this.paciente.setCpf(paciente.getCpf());
-                    this.pacienteEncontrado = false;
-                    FacesContext.getCurrentInstance().addMessage(null, 
-                        new FacesMessage(FacesMessage.SEVERITY_WARN, 
-                        "Paciente não encontrado", 
-                        "Um novo paciente será criado com o CPF fornecido."));
-                }
-            } catch (Exception e) {
-                FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                    "Erro", "Ocorreu um erro ao buscar o paciente: " + e.getMessage()));
-            }
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Erro", "O CPF fornecido é inválido."));
-        }
-    }
+	public void buscarPaciente() {
+		String msg = "";
+		if (paciente.getCpf() != null && !paciente.getCpf().trim().isEmpty()) {
+			try {
 
-    public void salvar() {
-        try {
-            List<Integer> numerosExistentes = atendimentoService.buscarNumerosExistentes();
-            atendimento.gerarNumeroAtendimento(numerosExistentes); // Gera um número único
-            atendimento.setPaciente(paciente);
-            atendimento.setMedicos(medicosSelecionados);
-            atendimento.setSituacao(Situacao.EM_ABERTO); // Define a situação como "Em Aberto"
+				Paciente pacienteEncontrado = pacienteService.findByCpf(paciente.getCpf());
+				if (pacienteEncontrado != null) {
+					this.paciente = pacienteEncontrado;
+					this.pacienteEncontrado = true;
+					msg = "Paciente encontrado" + paciente.getNomeCompleto();
+					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 
-            // Salva o atendimento
-            atendimentoService.create(atendimento);
+				} else {
+					this.paciente = new Paciente();
+					this.paciente.setCpf(paciente.getCpf());
+					paciente.setEndereco(new Endereco());
+					this.pacienteEncontrado = true;
+					msg = "Paciente nao encontrado, um novo paciente sera criado com o CPF fornecido.";
+					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+				}
+			} catch (Exception e) {
+				msg = "Ocorreu um erro ao buscar o paciente. ERRO: " + e.getMessage();
+				FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 
-            // Mensagem de sucesso
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                "Atendimento gravado com sucesso. Número: " + atendimento.getNumero(), ""));
-            if (medicosSelecionados == null || medicosSelecionados.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Erro", "É necessário selecionar pelo menos um médico."));
-                return; // Sai do método se não houver médicos selecionados
-            }
-            limparFormulario();
-        } catch (Exception e) {
-            // Mensagem de erro
-            FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "Erro", "Ocorreu um erro ao gravar o atendimento: " + e.getMessage()));
-        }
-    }
+			}
+		} else {
+			msg = "Erro: O CPF fornecido ï¿½ invï¿½lido.";
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+		}
+	}
 
-    private void limparFormulario() {
-        paciente = new Paciente();
-        atendimento = new Atendimento();
-        medicosSelecionados = null;
-        pacienteEncontrado = false;
-    }
+	public void salvar() {
+		String msg = "";
+		try {
+
+			if (medicosSelecionados == null || medicosSelecionados.isEmpty()) {
+				msg = "E necesserio selecionar pelo menos um medico.";
+				FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+				return;
+			} else {
+				if (paciente.getId() == null) {
+					List<Integer> numerosExistentes = atendimentoService.buscarNumerosExistentes();
+					atendimento.gerarNumeroAtendimento(numerosExistentes); // Gera um nï¿½mero ï¿½nico
+					atendimento.setPaciente(paciente);
+					atendimento.setMedicos(medicosSelecionados);
+					atendimento.setSituacao(Situacao.EM_ABERTO); // Define a situaï¿½ï¿½o como "Em Aberto"
+
+					atendimentoService.create(atendimento);
+					paciente = new Paciente();
+					paciente.setEndereco(new Endereco());
+
+					msg = "Atendimento gravado com sucesso. Numero: " + atendimento.getNumero();
+					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+				} else {
+					List<Integer> numerosExistentes = atendimentoService.buscarNumerosExistentes();
+					atendimento.gerarNumeroAtendimento(numerosExistentes); // Gera um nï¿½mero ï¿½nico
+					atendimento.setPaciente(paciente);
+					atendimento.setMedicos(medicosSelecionados);
+					atendimento.setSituacao(Situacao.EM_ABERTO);
+					
+					atendimentoService.merge(atendimento);
+					msg = "Atendimento atualizado com sucesso. Numero: " + atendimento.getNumero();
+					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+				}
+			}
+
+		} catch (Exception e) {
+			msg = "Ocorreu um erro ao gravar o atendimento: " + e.getMessage();
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+		}
+
+	}
 
 	public PacienteService getPacienteService() {
 		return pacienteService;
@@ -152,12 +157,12 @@ public class AtendimentoBean {
 	}
 
 	public Paciente getPaciente() {
-        return paciente;
-    }
+		return paciente;
+	}
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
+	}
 
 	public Atendimento getAtendimento() {
 		return atendimento;
@@ -175,14 +180,6 @@ public class AtendimentoBean {
 		this.pacienteEncontrado = pacienteEncontrado;
 	}
 
-	public Endereco getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-
 	public List<Medico> getMedicosSelecionados() {
 		return medicosSelecionados;
 	}
@@ -190,6 +187,5 @@ public class AtendimentoBean {
 	public void setMedicosSelecionados(List<Medico> medicosSelecionados) {
 		this.medicosSelecionados = medicosSelecionados;
 	}
-	
-	
+
 }

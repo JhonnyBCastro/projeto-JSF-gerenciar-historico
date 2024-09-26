@@ -1,95 +1,108 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="template.xhtml">
-    <ui:define name="titulo">Lançar Atendimentos</ui:define>
-    <ui:define name="conteudo">
-    
-        <p:growl life="5000" id="msg" />
+	<ui:define name="titulo">Lançar Atendimentos</ui:define>
+	<ui:define name="conteudo">
 
-        <h:form id="formAtendimento">
-            <p:panel header="Busca de Paciente">
-                <h:panelGrid columns="3">
-                    <p:outputLabel value="CPF: " for="cpfInput"/>
-                    <p:inputMask value="#{atendimentoBean.paciente.cpf}" id="cpfInput"/>
-                    <p:commandButton action="#{atendimentoBean.buscarPaciente}" value="Verificar Paciente"
-                                     process="@this cpfInput" update="dadosPaciente msg" />
-                </h:panelGrid>
-            </p:panel>
-            
-            <p:panel id="dadosPaciente" header="Dados do Paciente" rendered="#{!atendimentoBean.pacienteEncontrado}">
-                <h:panelGrid columns="2">
-                	<p:outputLabel value="CPF: " for="cpf" />
-                    <p:inputText value="#{atendimentoBean.paciente.cpf}" id="cpf" required="true" />
-                
-                    <p:outputLabel value="Nome: " for="nome" />
-                    <p:inputText value="#{atendimentoBean.paciente.nomeCompleto}" id="nome" required="true" />
-                    
-                    <p:outputLabel value="Telefone: " for="telefone" />
-                    <p:inputMask value="#{atendimentoBean.paciente.telefone}" id="telefone" mask="(99) 9999-9999"/>
+		<p:growl life="5000" id="msg" />
 
-                    <p:outputLabel value="Celular: " for="celular" />
-                    <p:inputMask value="#{atendimentoBean.paciente.celular}" id="celular" mask="(99) 99999-9999"/>
-
-                    <p:outputLabel value="Data de Nascimento: " for="dataNasc" />
-                    <p:datePicker value="#{atendimentoBean.paciente.nascimento}" id="dataNasc" 
-                                  pattern="dd/MM/yyyy" mask="true" locale="pt_BR" />
-                    
-                    <p:outputLabel value="Rua: " for="rua" />
-                    <p:inputText value="#{atendimentoBean.paciente.endereco.rua}" id="rua" />
-
-                    <p:outputLabel value="Bairro: " for="bairro" />
-                    <p:inputText value="#{atendimentoBean.paciente.endereco.bairro}" id="bairro" />
-
-                    <p:outputLabel value="Número: " for="numero" />
-                    <p:inputText value="#{atendimentoBean.paciente.endereco.numero}" id="numero" />
-
-                    <p:outputLabel value="CEP: " for="cep" />
-                    <p:inputMask value="#{atendimentoBean.paciente.endereco.cep}" id="cep" mask="99999-999"/>
-
-                    <p:outputLabel value="Cidade: " for="cidade" />
-                    <p:inputText value="#{atendimentoBean.paciente.endereco.cidade}" id="cidade" />
-                </h:panelGrid>
-
-                <p:commandButton value="Salvar Paciente" 
-                                 action="#{pacienteBean.gravar}"
-                                 update="dadosPaciente msg" />
-            </p:panel>
-            
-            <p:panel header="Dados do Atendimento">
-			    <h:panelGrid columns="2">
-			        <p:outputLabel value="Médicos: " for="medicos" />
-			        <p:selectCheckboxMenu id="medicos" 
-			                              value="#{atendimentoBean.medicosSelecionados}" 
-			                              label="Selecione os médicos" 
-			                              multiple="true" 
-			                              filter="true" 
-			                              filterMatchMode="contains">
-			            <f:selectItems value="#{atendimentoBean.medicos}" 
-			                           var="medico" 
-			                           itemLabel="#{medico.nomeCompleto}" 
-			                           itemValue="#{medico}" />
-			        </p:selectCheckboxMenu>
-			        
-			        <p:outputLabel value="Data e Hora: " for="dataHora" />
-			        <p:calendar id="dataHora" 
-			                    value="#{atendimentoBean.atendimento.dataEntrada}" 
-			                    pattern="dd/MM/yyyy HH:mm" 
-			                    showTime="true" />
-			        
-			        <p:outputLabel value="Parecer: " for="parecer" />
-			        <p:inputTextarea value="#{atendimentoBean.atendimento.parecer}" id="parecer" rows="3" />
-			    </h:panelGrid>
+		<h:form id="formFiltroCpf">
+			<p:panel header="Busca de Paciente">
+				<h:panelGrid columns="3">
+					<p:outputLabel value="CPF: " for="cpfInput" />
+					<p:inputMask value="#{atendimentoBean.paciente.cpf}" id="cpfInput" />
+					<p:commandButton action="#{atendimentoBean.buscarPaciente}"
+						value="Verificar Paciente" process="@form"
+						update="@form, msg, formAtendimento" />
+				</h:panelGrid>
 			</p:panel>
-            
-            <p:commandButton action="#{atendimentoBean.salvar}" value="Gravar Atendimento"
-                             process="@form" update="@form msg" />
-        </h:form>
-    
-    </ui:define>
+		</h:form>
+		
+		<h:form id="formAtendimento">
+		
+			<p:panel id="dadosPaciente" header="Dados do Paciente"
+				rendered="#{atendimentoBean.pacienteEncontrado}">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="CPF: " for="cpf" />
+					<p:inputText value="#{atendimentoBean.paciente.cpf}" id="cpf"
+						required="true" />
+
+					<p:outputLabel value="Nome: " for="nome" />
+					<p:inputText value="#{atendimentoBean.paciente.primeiroNome}"
+						id="nome" required="true" />
+
+					<p:outputLabel value="Sobrenome " for="sobrenome" />
+					<p:inputText value="#{atendimentoBean.paciente.sobrenome}"
+						id="sobrenome" required="true" />
+
+					<p:outputLabel value="Telefone: " for="telefone" />
+					<p:inputMask value="#{atendimentoBean.paciente.telefone}"
+						id="telefone" mask="(99) 9999-9999" />
+
+					<p:outputLabel value="Celular: " for="celular" />
+					<p:inputMask value="#{atendimentoBean.paciente.celular}"
+						id="celular" mask="(99) 99999-9999" />
+
+					<p:outputLabel value="Data de Nascimento: " for="dataNasc" />
+					<p:datePicker value="#{atendimentoBean.paciente.nascimento}"
+						id="dataNasc" pattern="dd/MM/yyyy" mask="true" locale="pt_BR" />
+
+					<p:outputLabel value="Rua: " for="rua" />
+					<p:inputText value="#{atendimentoBean.paciente.endereco.rua}"
+						id="rua" />
+
+					<p:outputLabel value="Bairro: " for="bairro" />
+					<p:inputText value="#{atendimentoBean.paciente.endereco.bairro}"
+						id="bairro" />
+
+					<p:outputLabel value="Número: " for="numero" />
+					<p:inputText value="#{atendimentoBean.paciente.endereco.numero}"
+						id="numero" />
+
+					<p:outputLabel value="CEP: " for="cep" />
+					<p:inputMask value="#{atendimentoBean.paciente.endereco.cep}"
+						id="cep" mask="99999-999" />
+
+					<p:outputLabel value="Cidade: " for="cidade" />
+					<p:inputText value="#{atendimentoBean.paciente.endereco.cidade}"
+						id="cidade" />
+				</h:panelGrid>
+
+			</p:panel>
+
+			<p:panel header="Dados do Atendimento">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Médicos: " for="medicos" />
+					<p:selectCheckboxMenu id="medicos"
+						value="#{atendimentoBean.medicosSelecionados}"
+						label="Selecione os médicos" multiple="true" filter="true"
+						filterMatchMode="contains">
+						<f:selectItems value="#{atendimentoBean.medicos}" var="medico"
+							itemLabel="#{medico.nomeCompleto}" itemValue="#{medico}" />
+					</p:selectCheckboxMenu>
+
+					<p:outputLabel value="Data e Hora: " for="dataHora" />
+					<p:calendar id="dataHora"
+						value="#{atendimentoBean.atendimento.dataEntrada}"
+						pattern="dd/MM/yyyy HH:mm" showTime="true" />
+
+					<p:outputLabel value="Parecer: " for="parecer" />
+					<p:inputTextarea value="#{atendimentoBean.atendimento.parecer}"
+						id="parecer" rows="3" />
+				</h:panelGrid>
+			</p:panel>
+
+			<p:commandButton value="Salvar Paciente"
+				action="#{atendimentoBean.salvar()}" process="@form"
+				update="@form, msg" />
+
+		</h:form>
+
+	</ui:define>
 </ui:composition>
 </html>

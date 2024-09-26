@@ -20,8 +20,9 @@ public class Endereco {
 	public Endereco() {
 	}
 	
-	public void getEnderecoResumido() {
-		
+	public String getEnderecoResumido() {
+		return "Rua " + rua + ", Bairro: " + bairro + ", N° " + numero + ", Cep: " + cep 
+				+ ", Cidade: " + cidade;
 	}
 	
 	public String getRua() {

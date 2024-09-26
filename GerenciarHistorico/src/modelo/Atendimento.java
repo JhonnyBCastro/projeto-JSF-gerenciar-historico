@@ -3,6 +3,8 @@ package modelo;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,21 +23,21 @@ public class Atendimento {
     private Situacao situacao;
     private String parecer;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Paciente paciente;
     
     @ManyToMany
     private List<Medico> medicos;
 
     public Atendimento() {
-        // Construtor sem lógica de geração de número
+        // Construtor sem lï¿½gica de geraï¿½ï¿½o de nï¿½mero
     }
 
     public void gerarNumeroAtendimento(List<Integer> numerosExistentes) {
         Random numAtendimento = new Random();
         do {
             numero = numAtendimento.nextInt(10000);
-        } while (numerosExistentes.contains(numero)); // Verifica se o número já existe
+        } while (numerosExistentes.contains(numero)); // Verifica se o nï¿½mero jï¿½ existe
     }
 
     // Getters e Setters
