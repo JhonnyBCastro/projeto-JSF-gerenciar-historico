@@ -68,6 +68,7 @@ public class MedicoBean {
 		medico = new Medico();
 		medico.setEndereco(new Endereco());
 		atualizarListaMedico();
+		
 
 	}
 
@@ -80,11 +81,13 @@ public class MedicoBean {
 		try {
 			msg = "Medico deletado com sucesso";
 			medicoService.remove(delM);
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 			atualizarListaMedico();
 		}catch (Exception e) {
-			msg = "Nao foi possivel deletar o medico";			
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+			msg = "Nao foi possivel deletar o medico";
 		}
-		FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+		
 	}
 
 	public Medico getMedico() {
