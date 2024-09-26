@@ -1,6 +1,9 @@
 package controle;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -38,6 +41,16 @@ public class MedicoBean {
 
 	public void atualizarListaMedico() {
 		medicos = medicoService.listAll();
+		Collections.sort(medicos, new Comparator<Medico>() {
+			@Override
+			public int compare(Medico m1, Medico m2) {
+				return m1.getPrimeiroNome().compareToIgnoreCase(m2.getPrimeiroNome());
+			}
+		});
+	}
+	
+	public void carregarMaisInfo(Medico m) {
+		medico = medicoService.buscarMedico(m.getId());
 	}
 
 	public void gravar() {
@@ -59,11 +72,19 @@ public class MedicoBean {
 	}
 
 	public void editarMedico(Medico editM) {
-
+		medico = medicoService.buscarMedico(editM.getId());
 	}
 
 	public void deletarMedico(Medico delM) {
-
+		String msg = "";
+		try {
+			msg = "Medico deletado com sucesso";
+			medicoService.remove(delM);
+			atualizarListaMedico();
+		}catch (Exception e) {
+			msg = "Nao foi possivel deletar o medico";			
+		}
+		FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 	}
 
 	public Medico getMedico() {
