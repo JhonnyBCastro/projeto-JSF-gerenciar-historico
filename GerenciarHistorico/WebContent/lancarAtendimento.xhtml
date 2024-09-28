@@ -15,7 +15,7 @@
 			<p:panel header="Busca de Paciente">
 				<h:panelGrid columns="3">
 					<p:outputLabel value="CPF: " for="cpfInput" />
-					<p:inputMask value="#{atendimentoBean.pacienteParaEncontrar.cpf}" id="cpfInput" />
+					<p:inputMask value="#{atendimentoBean.pacienteParaEncontrar.cpf}" id="cpfInput" mask="999.999.999-99"/>
 					<p:commandButton action="#{atendimentoBean.buscarPaciente()}"
 						value="Verificar Paciente" process="@form"
 						update="@form, msg, formAtendimento"/>
@@ -29,8 +29,8 @@
 				rendered="#{atendimentoBean.exibirCamposCadastro}">
 				<h:panelGrid columns="2">
 					<p:outputLabel value="CPF: " for="cpf" />
-					<p:inputText value="#{atendimentoBean.paciente.cpf}" id="cpf"
-						required="true" />
+					<p:inputMask value="#{atendimentoBean.paciente.cpf}" id="cpf"
+						required="true" mask="999.999.999-99"/>
 
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText value="#{atendimentoBean.paciente.primeiroNome}"
