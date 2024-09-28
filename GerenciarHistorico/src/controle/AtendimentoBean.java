@@ -39,45 +39,58 @@ public class AtendimentoBean {
 	private List<Medico> medicosSelecionados;
 	private Paciente paciente = new Paciente();
 	private Atendimento atendimento;
-	private boolean pacienteEncontrado;
+	private boolean exibirCamposCadastro;
+	private Paciente pacienteParaEncontrar = new Paciente();
 
 	@PostConstruct
 	public void init() {
 		medicos = medicoService.listAll();
 		atendimento = new Atendimento();
 		paciente = new Paciente();
-		pacienteEncontrado = false;
+		exibirCamposCadastro = false;
 		paciente.setEndereco(new Endereco());
 		medicosSelecionados = new ArrayList<Medico>();
 	}
 
 	public void buscarPaciente() {
 		String msg = "";
-		if (paciente.getCpf() != null && !paciente.getCpf().trim().isEmpty()) {
+		Paciente reserva;
+		Atendimento ultimoAtendimento;
+		if (pacienteParaEncontrar.getCpf() != null && !pacienteParaEncontrar.getCpf().trim().isEmpty()) {
 			try {
+				reserva = pacienteParaEncontrar;
+				pacienteParaEncontrar = pacienteService.findByCpf(pacienteParaEncontrar.getCpf());
+				if (pacienteParaEncontrar != null) {
+					paciente = pacienteParaEncontrar;
+					ultimoAtendimento = atendimentoService.buscarAtendimentoPaciente(paciente.getId());
 
-				Paciente pacienteEncontrado = pacienteService.findByCpf(paciente.getCpf());
-				if (pacienteEncontrado != null) {
-					this.paciente = pacienteEncontrado;
-					this.pacienteEncontrado = true;
-					msg = "Paciente encontrado" + paciente.getNomeCompleto();
+					/*
+					 * descomentar esse pedaco caso queira trazer os dados do ultimo atendimento
+					 */
+					// atendimento = ultimoAtendimento;
+					exibirCamposCadastro = true;
+					medicosSelecionados = atendimentoService.buscarMedicos(atendimento.getId());
+					msg = "Paciente encontrado: " + paciente.getNomeCompleto();
+					pacienteParaEncontrar = new Paciente();
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 
 				} else {
-					this.paciente = new Paciente();
-					this.paciente.setCpf(paciente.getCpf());
+					paciente = new Paciente();
+					paciente.setCpf(reserva.getCpf());
 					paciente.setEndereco(new Endereco());
-					this.pacienteEncontrado = true;
+					pacienteParaEncontrar = new Paciente();
+					exibirCamposCadastro = true;
 					msg = "Paciente nao encontrado, um novo paciente sera criado com o CPF fornecido.";
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 				}
 			} catch (Exception e) {
 				msg = "Ocorreu um erro ao buscar o paciente. ERRO: " + e.getMessage();
+				FacesMessage message = new FacesMessage();
 				FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 
 			}
 		} else {
-			msg = "Erro: O CPF fornecido � inv�lido.";
+			msg = "Erro: O CPF fornecido e invalido.";
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 		}
 	}
@@ -99,19 +112,25 @@ public class AtendimentoBean {
 					atendimento.setSituacao(Situacao.EM_ABERTO); // Define a situa��o como "Em Aberto"
 
 					atendimentoService.create(atendimento);
-					paciente = new Paciente();
-					paciente.setEndereco(new Endereco());
 
 					msg = "Atendimento gravado com sucesso. Numero: " + atendimento.getNumero();
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
+
+					paciente = new Paciente();
+					paciente.setEndereco(new Endereco());
+					medicosSelecionados = new ArrayList<Medico>();
+					atendimento = new Atendimento();
 				} else {
 					List<Integer> numerosExistentes = atendimentoService.buscarNumerosExistentes();
 					atendimento.gerarNumeroAtendimento(numerosExistentes); // Gera um n�mero �nico
 					atendimento.setPaciente(paciente);
 					atendimento.setMedicos(medicosSelecionados);
 					atendimento.setSituacao(Situacao.EM_ABERTO);
-					
+
 					atendimentoService.merge(atendimento);
+					paciente = new Paciente();
+					atendimento = new Atendimento();
+					medicosSelecionados = new ArrayList<Medico>();
 					msg = "Atendimento atualizado com sucesso. Numero: " + atendimento.getNumero();
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(msg));
 				}
@@ -172,12 +191,20 @@ public class AtendimentoBean {
 		this.atendimento = atendimento;
 	}
 
-	public boolean isPacienteEncontrado() {
-		return pacienteEncontrado;
+	public boolean isExibirCamposCadastro() {
+		return exibirCamposCadastro;
 	}
 
-	public void setPacienteEncontrado(boolean pacienteEncontrado) {
-		this.pacienteEncontrado = pacienteEncontrado;
+	public void setExibirCamposCadastro(boolean exibirCamposCadastro) {
+		this.exibirCamposCadastro = exibirCamposCadastro;
+	}
+
+	public Paciente getPacienteParaEncontrar() {
+		return pacienteParaEncontrar;
+	}
+
+	public void setPacienteParaEncontrar(Paciente pacienteParaEncontrar) {
+		this.pacienteParaEncontrar = pacienteParaEncontrar;
 	}
 
 	public List<Medico> getMedicosSelecionados() {

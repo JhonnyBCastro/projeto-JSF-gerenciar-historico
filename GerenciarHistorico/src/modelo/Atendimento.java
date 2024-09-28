@@ -29,9 +29,7 @@ public class Atendimento {
     @ManyToMany
     private List<Medico> medicos;
 
-    public Atendimento() {
-        // Construtor sem l�gica de gera��o de n�mero
-    }
+    public Atendimento() {}
 
     public void gerarNumeroAtendimento(List<Integer> numerosExistentes) {
         Random numAtendimento = new Random();
@@ -40,7 +38,6 @@ public class Atendimento {
         } while (numerosExistentes.contains(numero)); // Verifica se o n�mero j� existe
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

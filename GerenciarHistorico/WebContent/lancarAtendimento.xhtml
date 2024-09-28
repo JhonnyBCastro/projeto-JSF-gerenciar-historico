@@ -15,18 +15,18 @@
 			<p:panel header="Busca de Paciente">
 				<h:panelGrid columns="3">
 					<p:outputLabel value="CPF: " for="cpfInput" />
-					<p:inputMask value="#{atendimentoBean.paciente.cpf}" id="cpfInput" />
-					<p:commandButton action="#{atendimentoBean.buscarPaciente}"
+					<p:inputMask value="#{atendimentoBean.pacienteParaEncontrar.cpf}" id="cpfInput" />
+					<p:commandButton action="#{atendimentoBean.buscarPaciente()}"
 						value="Verificar Paciente" process="@form"
-						update="@form, msg, formAtendimento" />
+						update="@form, msg, formAtendimento"/>
 				</h:panelGrid>
 			</p:panel>
 		</h:form>
-		
+
 		<h:form id="formAtendimento">
-		
+
 			<p:panel id="dadosPaciente" header="Dados do Paciente"
-				rendered="#{atendimentoBean.pacienteEncontrado}">
+				rendered="#{atendimentoBean.exibirCamposCadastro}">
 				<h:panelGrid columns="2">
 					<p:outputLabel value="CPF: " for="cpf" />
 					<p:inputText value="#{atendimentoBean.paciente.cpf}" id="cpf"
@@ -73,28 +73,27 @@
 						id="cidade" />
 				</h:panelGrid>
 
-			</p:panel>
+				<p:panel header="Dados do Atendimento">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Médicos: " for="medicos" />
+						<p:selectCheckboxMenu id="medicos"
+							value="#{atendimentoBean.medicosSelecionados}" 
+							label="Selecione os médicos" multiple="true" filter="true"
+							filterMatchMode="contains" >
+							<f:selectItems value="#{atendimentoBean.medicos}" var="medico"
+								itemLabel="#{medico.nomeCompleto}" itemValue="#{medico}" />
+						</p:selectCheckboxMenu>
 
-			<p:panel header="Dados do Atendimento">
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Médicos: " for="medicos" />
-					<p:selectCheckboxMenu id="medicos"
-						value="#{atendimentoBean.medicosSelecionados}"
-						label="Selecione os médicos" multiple="true" filter="true"
-						filterMatchMode="contains">
-						<f:selectItems value="#{atendimentoBean.medicos}" var="medico"
-							itemLabel="#{medico.nomeCompleto}" itemValue="#{medico}" />
-					</p:selectCheckboxMenu>
+						<p:outputLabel value="Data e Hora: " for="dataHora" />
+						<p:calendar id="dataHora"
+							value="#{atendimentoBean.atendimento.dataEntrada}"
+							pattern="dd/MM/yyyy HH:mm" showTime="true" />
 
-					<p:outputLabel value="Data e Hora: " for="dataHora" />
-					<p:calendar id="dataHora"
-						value="#{atendimentoBean.atendimento.dataEntrada}"
-						pattern="dd/MM/yyyy HH:mm" showTime="true" />
-
-					<p:outputLabel value="Parecer: " for="parecer" />
-					<p:inputTextarea value="#{atendimentoBean.atendimento.parecer}"
-						id="parecer" rows="3" />
-				</h:panelGrid>
+						<p:outputLabel value="Parecer: " for="parecer" />
+						<p:inputTextarea value="#{atendimentoBean.atendimento.parecer}"
+							id="parecer" rows="3" />
+					</h:panelGrid>
+				</p:panel>
 			</p:panel>
 
 			<p:commandButton value="Salvar Paciente"

@@ -11,21 +11,30 @@ import javax.persistence.criteria.Root;
 import modelo.Paciente;
 
 @Stateless
-public class PacienteService extends GenericService<Paciente>{
+public class PacienteService extends GenericService<Paciente> {
 
 	public PacienteService() {
 		super(Paciente.class);
-		
+
 	}
 
 	public Paciente findByCpf(String cpf) {
-	    try {
-	        TypedQuery<Paciente> query = getEntityManager().createQuery(
-	                "SELECT p FROM Paciente p WHERE p.cpf = :cpf", Paciente.class);
-	        query.setParameter("cpf", cpf);
-	        return query.getSingleResult();
-	    } catch (Exception e) {
-	        return null;
-	    }
+		try {
+			final CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+			final CriteriaQuery<Paciente> criteriaQuery = criteriaBuilder.createQuery(Paciente.class);
+			final Root<Paciente> pacienteRoot = criteriaQuery.from(Paciente.class);
+
+			criteriaQuery.select(pacienteRoot);
+
+			criteriaQuery.where(criteriaBuilder.equal(pacienteRoot.get("cpf"), cpf));
+
+			Paciente resultado = getEntityManager().createQuery(criteriaQuery).getSingleResult();
+
+			return resultado;
+
+		} catch (Exception e) {
+			return null;
+		}
+   
 	}
 }
