@@ -23,10 +23,10 @@
 						<p:inputText value="#{medicoBean.medico.sobrenome}" id="sobrenome" />
 
 						<p:outputLabel value="Telefone" for="telefone" />
-						<p:inputText value="#{medicoBean.medico.telefone}" id="telefone" />
+						<p:inputMask value="#{medicoBean.medico.telefone}" id="telefone" mask="(99) 9999-9999"/>
 
 						<p:outputLabel value="Celular" for="celular" />
-						<p:inputText value="#{medicoBean.medico.celular}" id="celular" />
+						<p:inputMask value="#{medicoBean.medico.celular}" id="celular" mask="(99) 99999-9999"/>
 
 						<p:outputLabel value="Data de nascimento" for="dataNasc" />
 						<p:datePicker value="#{medicoBean.medico.nascimento}"
@@ -54,10 +54,10 @@
 
 					<p:outputLabel value="Numero" for="numero" />
 					<p:inputText value="#{medicoBean.medico.endereco.numero}"
-						id="numero" />
+						id="numero" type="number"/>
 
 					<p:outputLabel value="Cep" for="cep" />
-					<p:inputText value="#{medicoBean.medico.endereco.cep}" id="cep" />
+					<p:inputMask value="#{medicoBean.medico.endereco.cep}" id="cep" mask="99999-999"/>
 
 					<p:outputLabel value="Cidade" for="cidade" />
 					<p:inputText value="#{medicoBean.medico.endereco.cidade}"
