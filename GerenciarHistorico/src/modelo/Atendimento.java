@@ -23,7 +23,7 @@ public class Atendimento {
     private Situacao situacao;
     private String parecer;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})   
     private Paciente paciente;
     
     @ManyToMany
